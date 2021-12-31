@@ -33,7 +33,7 @@ void Phonebook::print_menu() {
 //^^OK
 
 
-
+//Moikkuli testinen :)
 void Phonebook::start() {
 	int command = 0;
 
