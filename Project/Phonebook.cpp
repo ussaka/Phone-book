@@ -33,7 +33,6 @@ void Phonebook::print_menu() {
 //^^OK
 
 
-//Moikkuli testinen :)
 void Phonebook::start() {
 	int command = 0;
 
@@ -42,7 +41,6 @@ void Phonebook::start() {
 
 		cout << "Enter command:" << endl;
 		cin >> command;
-
 		if (cin.fail()) { //check that input can be handled
 			cin.clear(); //clear error flag
 			cin.ignore(numeric_limits<streamsize>::max(), '\n'); //ignore cin until '\n' is reached --> ignore whole input line that raised fail flag
@@ -55,7 +53,7 @@ void Phonebook::start() {
 			//^^OK
 
 		case 2: //EI OK
-
+			save_to_file();
 			break;
 		case 3: //EI OK
 			read_from_file();
@@ -181,6 +179,7 @@ void Phonebook::save_to_file() {
 	for (auto& e : phonebook) {
 		outFile << e.name << "," << e.email << "," << e.telephone_number << "," << e.city << endl;
 	}
+	cout << "Done." << endl;
 }
 
 void Phonebook::remove_person() {
