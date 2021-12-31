@@ -20,7 +20,7 @@ void Phonebook::print_menu() {
 	cout << "#                                 Phonebook                                    #" << endl;
 	cout << "################################################################################" << endl;
 	cout << "# 1. Initialize (clear all records)                                            #" << endl;
-	cout << "# 2. Save contact information to file in csv format                            #" << endl;
+	cout << "# 2. Save contact information to file in csv format (if Phonebook.csv exists overwrite)  #" << endl;
 	cout << "# 3. Read contact information from file and add to the phonebook               #" << endl;
 	cout << "# 4. Add new person to phone book                                              #" << endl;
 	cout << "# 5. Remove a person from the phone book                                       #" << endl;
@@ -30,8 +30,6 @@ void Phonebook::print_menu() {
 	cout << "################################################################################" << endl;
 	cout << endl;
 }
-//^^OK
-
 
 void Phonebook::start() {
 	int command = 0;
@@ -50,20 +48,19 @@ void Phonebook::start() {
 		case 1:
 			initialize();
 			break;
-			//^^OK
-
-		case 2: //EI OK
+		case 2:
 			save_to_file();
 			break;
-		case 3: //EI OK
+		case 3:
 			read_from_file();
 			break;
-		case 4: //EI OK
+		case 4:
 			add_person();
 			break;
-		case 5: // EI OK
-
+		case 5:
+			remove_person(); //KESKEN
 			break;
+			//^ ^OK
 		case 6: //EI OK
 
 			break;
@@ -88,6 +85,55 @@ void Phonebook::initialize() {
 	phonebook.clear();
 }
 
+void Phonebook::save_to_file() {
+	ofstream outFile("Phonebook.csv");
+
+	if (!outFile.is_open()) {
+		cout << "Error, can't write to Phonebook.csv!" << endl;
+	}
+	else if (outFile.is_open()) {
+		outFile << "Name;Email;Telephone number;City;Relative" << endl;
+		for (auto& person : phonebook) {
+			outFile << person.name << ";" << person.email << ";" << person.telephone_number << ";" << person.city << ";" << person.relative << endl;
+		}
+		cout << "Phonebook saved to the file!" << endl;
+	}
+}
+
+void Phonebook::read_from_file() {
+	ifstream inputFile("Phonebook.csv");
+
+	if (!inputFile.is_open()) {
+		cout << "Error, can't open Phonebook.csv!" << endl;
+	}
+	else if (inputFile.is_open()) {
+		string line, word, name, email, phone, city;
+		bool relative = false;
+
+		getline(inputFile, line); //skip first header line
+		while (getline(inputFile, line)) { //true while inputFile outputs line
+			stringstream s(line); //convert line to stream
+			getline(s, word, ';'); //get first word from the stream s, delimiter ';'
+			name = word;
+			getline(s, word, ';');
+			email = word;
+			getline(s, word, ';');
+			phone = word;
+			getline(s, word, ';');
+			city = word;
+			getline(s, word, '\n');
+			if (word == "0") {
+				relative = false;
+			}
+			else if (word == "1") {
+				relative = true;
+			}
+			phonebook.push_back(Person(name, email, phone, city, relative));
+		}
+		cout << "Read succesfull" << endl;
+	}
+}
+
 void Phonebook::add_person() {
 	string name, email, phone_number, city, relative;
 	bool r;
@@ -95,11 +141,13 @@ void Phonebook::add_person() {
 	cout << "Enter new person's info:" << endl;
 	cout << "Name: ";
 	cin >> name;
+	getline(cin, name); //allows name to contain spaces
 	//Check that name doesn't contain numbers
 	while (contains_digits(name)) {
 		cout << "Name contains number(s)!" << endl << "Enter name again: ";
 		name.clear(); //clear string
 		cin >> name;
+		getline(cin, name); //allows name to contain spaces
 	}
 
 	cout << "Email: ";
@@ -115,11 +163,13 @@ void Phonebook::add_person() {
 
 	cout << "City: ";
 	cin >> city;
+	getline(cin, city); //allows city to contain spaces
 	//Check that city doesn't contain numbers
 	while (contains_digits(city)) {
 		cout << "City contains number(s)!" << endl << "Enter city again: ";
 		city.clear(); //clear string
 		cin >> city;
+		getline(cin, city); //allows city to contain spaces
 	}
 
 	while (relative != "No" && relative != "Yes") {
@@ -144,12 +194,33 @@ void Phonebook::add_person() {
 	}
 }
 
+void Phonebook::remove_person() {
+	string namee, phone_number;
+	cout << "Enter person's phone number: "; //There can be multiple person's with same name but phone number is always tied to one person.
+	cin >> phone_number;
+
+	for (auto it = phonebook.begin(); it != phonebook.end(); ++it) {
+		if (it->telephone_number == phone_number) {
+			namee = it->name;
+			phonebook.erase(it);
+			cout << namee << " with phone number " << phone_number << " erased from the phonebook!" << endl;
+			break;
+		}
+		else {
+			cout << "Person with phone number " << phone_number << " was not found in the phonebook!" << endl;
+		}
+	}
+
+}
+
 void Phonebook::shutdown() {
 	cout << "Shutting down...." << endl;
 	exit(0);
 }
 //^^OK
-// 
+
+
+
 //Helper functions
 bool Phonebook::contains_digits(string s) {
 	for (auto i = s.begin(); i != s.end(); ++i) {
@@ -172,33 +243,7 @@ bool Phonebook::other_than_numbers(string s) {
 
 
 
-void Phonebook::save_to_file() {
-	ofstream outFile("Phonebook.csv");
 
-	outFile << "Name,Email,Telephone number,City" << endl;
-	for (auto& e : phonebook) {
-		outFile << e.name << "," << e.email << "," << e.telephone_number << "," << e.city << endl;
-	}
-	cout << "Done." << endl;
-}
-
-void Phonebook::remove_person() {
-	string input;
-	cout << "Enter person's name: ";
-	cin >> input;
-
-	for (auto it = phonebook.begin(); it != phonebook.end(); ++it) {
-		if (it->name == input) {
-			phonebook.erase(it);
-			cout << input << " erased from the database!" << endl;
-			break;
-		}
-		else {
-			cout << input << " not found in the database!" << endl;
-		}
-	}
-
-}
 
 void Phonebook::print_in_city() {
 	string input;
@@ -212,23 +257,4 @@ void Phonebook::print_in_city() {
 	}
 }
 
-void Phonebook::read_from_file() {
-	ifstream inputFile("Phonebook.csv");
-	string line, word, name, email, phone, city;
-	bool rel = false;
-
-	while (getline(inputFile, line)) {
-		stringstream s(line);
-		getline(s, word, ',');
-		name = word;
-		getline(s, word, ',');
-		email = word;
-		getline(s, word, ',');
-		phone = word;
-		getline(s, word, ',');
-		city = word;
-
-		phonebook.push_back(Person(name, email, phone, city, rel));
-	}
-}
 //^^EI OK
