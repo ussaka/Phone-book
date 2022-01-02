@@ -7,6 +7,7 @@
 #include <string>
 #include <sstream>
 #include <fstream>
+#include <iomanip>
 #include "Phonebook.h"
 
 using namespace std;
@@ -16,18 +17,17 @@ Phonebook::Phonebook() {
 
 void Phonebook::print_menu() {
 	cout << endl;
-	cout << "################################################################################" << endl;
-	cout << "#                                 Phonebook                                    #" << endl;
-	cout << "################################################################################" << endl;
-	cout << "# 1. Initialize (clear all records)                                            #" << endl;
-	cout << "# 2. Save contact information to file in csv format (if Phonebook.csv exists overwrite)  #" << endl;
-	cout << "# 3. Read contact information from file and add to the phonebook               #" << endl;
-	cout << "# 4. Add new person to phone book                                              #" << endl;
-	cout << "# 5. Remove a person from the phone book                                       #" << endl;
-	cout << "# 6. Print a list of persons who live in the given city                        #" << endl;
-	cout << "# 7. Print all contact information, relatives are printed before other persons #" << endl;
-	cout << "# 8. Quit                                                                      #" << endl;
-	cout << "################################################################################" << endl;
+	cout << setw(90) << setfill('-') << ' ' << endl;
+	cout << '|' << setw(44) << setfill(' ') << "Phonebook" << setw(44) << setfill(' ') << '|' << endl;
+	cout << setw(90) << setfill('-') << ' ' << endl;
+	cout << "    1. Initialize (clear all records)" << endl;
+	cout << "    2. Save contact information to file in csv format (if Phonebook.csv exists overwrite)" << endl;
+	cout << "    3. Read contact information from file and add to the phonebook" << endl;
+	cout << "    4. Add new person to phone book" << endl;
+	cout << "    5. Remove a person from the phone book" << endl;
+	cout << "    6. Print a list of persons who live in the given city" << endl;
+	cout << "    7. Print all contact information, relatives are printed before other persons" << endl;
+	cout << "    8. Quit" << endl;
 	cout << endl;
 }
 
@@ -36,7 +36,6 @@ void Phonebook::start() {
 
 	while (true) {
 		print_menu(); //print user interface
-
 		cout << "Enter command:" << endl;
 		cin >> command;
 		if (cin.fail()) { //check that input can be handled
@@ -77,6 +76,7 @@ void Phonebook::start() {
 
 void Phonebook::initialize() {
 	phonebook.clear();
+	cout << "Phonebook initialized!" << endl;
 }
 
 void Phonebook::save_to_file() {
@@ -124,7 +124,7 @@ void Phonebook::read_from_file() {
 			}
 			phonebook.push_back(Person(name, email, phone, city, relative));
 		}
-		cout << "Read succesfull" << endl;
+		cout << "Read succesfull!" << endl;
 	}
 }
 
@@ -140,19 +140,18 @@ void Phonebook::add_person() {
 	while (contains_digits(name)) {
 		cout << "Name contains number(s)!" << endl << "Enter name again: ";
 		name.clear(); //clear string
-		cin.ignore(); //make getline ignore previous cout;
 		getline(cin, name); //allows name to contain spaces
 	}
 
 	cout << "Email: ";
-	cin >> email;
+	getline(cin, email);
 
 	cout << "Number: ";
-	cin >> phone_number;
+	getline(cin, phone_number);
 	while (other_than_digits(phone_number)) {
-		cout << "Phone number contains character(s)!" << endl << "Enter phone number again: ";
+		cout << "Phone number contains other symbol(s) than digits!" << endl << "Enter phone number again: ";
 		phone_number.clear(); //clear string
-		cin >> phone_number;
+		getline(cin, phone_number);
 	}
 
 	cout << "City: ";
@@ -162,7 +161,6 @@ void Phonebook::add_person() {
 	while (contains_digits(city)) {
 		cout << "City contains number(s)!" << endl << "Enter city again: ";
 		city.clear(); //clear string
-		cin.ignore(); //make getline ignore previous cout;
 		getline(cin, city); //allows city to contain spaces
 	}
 
@@ -189,22 +187,25 @@ void Phonebook::add_person() {
 }
 
 void Phonebook::remove_person() {
-	string namee = "NOT FOUND";
-	string phone_number;
-	cout << "Enter person's phone number: "; //There can be multiple person's with same name but phone number is always tied to one person.
-	cin >> phone_number;
+	string namee;
+	bool hit = false;
+
+	cout << "Enter person's name: ";
+	cin.ignore(); //make getline ignore previous cout;
+	getline(cin, namee);
 
 	for (auto it = phonebook.begin(); it != phonebook.end(); ++it) {
-		if (it->telephone_number == phone_number) {
+		if (it->name == namee) {
 			Person p(it->name, it->email, it->city, it->telephone_number, it->relative);
 			namee = p.name;
 			phonebook.erase(it);
-			cout << namee << " with phone number " << phone_number << " erased from the phonebook!" << endl;
+			cout << namee << " erased from the phonebook!" << endl;
+			hit = true;
 			break;
 		}
 	}
-	if (namee == "NOT FOUND") {
-		cout << "Person with phone number " << phone_number << " was not found in the phonebook!" << endl;
+	if (hit == false) {
+		cout << namee << " was not found in the phonebook!" << endl;
 	}
 }
 
@@ -219,6 +220,7 @@ void Phonebook::print_in_city() {
 	for (auto& person : phonebook) {
 		if (person.city == city) {
 			cout << person << endl;
+
 			hit = true;
 		}
 	}
@@ -229,15 +231,22 @@ void Phonebook::print_in_city() {
 }
 
 void Phonebook::print_all() {
+	bool nothing_to_print = false;
+
 	for (auto& person : phonebook) {
 		if (person.relative == true) {
-			cout << person << endl << endl;
+			cout << person << endl;
+			nothing_to_print = true;
 		}
 	}
 	for (auto& person : phonebook) {
 		if (person.relative == false) {
-			cout << person << endl << endl;
+			cout << person << endl;
+			nothing_to_print = true;
 		}
+	}
+	if (nothing_to_print == false) {
+		cout << "Phonebook is empty!" << endl;
 	}
 }
 
@@ -245,7 +254,6 @@ void Phonebook::shutdown() {
 	cout << "Shutting down...." << endl;
 	exit(0);
 }
-
 
 //Helper functions
 bool Phonebook::contains_digits(string s) {
