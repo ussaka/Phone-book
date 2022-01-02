@@ -140,14 +140,13 @@ void Phonebook::add_person() {
 
 	cout << "Enter new person's info:" << endl;
 	cout << "Name: ";
-	cin >> name;
-	getline(cin, name); //allows name to contain spaces
+	getline(cin, name); //allows city to contain spaces
 	//Check that name doesn't contain numbers
 	while (contains_digits(name)) {
 		cout << "Name contains number(s)!" << endl << "Enter name again: ";
 		name.clear(); //clear string
 		cin >> name;
-		getline(cin, name); //allows name to contain spaces
+		getline(cin, name); //allows city to contain spaces
 	}
 
 	cout << "Email: ";
@@ -201,7 +200,8 @@ void Phonebook::remove_person() {
 
 	for (auto it = phonebook.begin(); it != phonebook.end(); ++it) {
 		if (it->telephone_number == phone_number) {
-			namee = it->name;
+			Person p(it->name, it->email, it->city, it->telephone_number, it->relative);
+			namee = p.name;
 			phonebook.erase(it);
 			cout << namee << " with phone number " << phone_number << " erased from the phonebook!" << endl;
 			break;
