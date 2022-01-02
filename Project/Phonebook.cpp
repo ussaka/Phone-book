@@ -58,7 +58,7 @@ void Phonebook::start() {
 			add_person();
 			break;
 		case 5:
-			remove_person(); //KESKEN
+			remove_person();
 			break;
 			//^ ^OK
 		case 6: //EI OK
@@ -140,13 +140,14 @@ void Phonebook::add_person() {
 
 	cout << "Enter new person's info:" << endl;
 	cout << "Name: ";
-	getline(cin, name); //allows city to contain spaces
+	cin.ignore(); //make getline ignore previous cout;
+	getline(cin, name); //allows name to contain spaces
 	//Check that name doesn't contain numbers
 	while (contains_digits(name)) {
 		cout << "Name contains number(s)!" << endl << "Enter name again: ";
 		name.clear(); //clear string
-		cin >> name;
-		getline(cin, name); //allows city to contain spaces
+		cin.ignore(); //make getline ignore previous cout;
+		getline(cin, name); //allows name to contain spaces
 	}
 
 	cout << "Email: ";
@@ -161,13 +162,13 @@ void Phonebook::add_person() {
 	}
 
 	cout << "City: ";
-	cin >> city;
+	cin.ignore(); //make getline ignore previous cout
 	getline(cin, city); //allows city to contain spaces
 	//Check that city doesn't contain numbers
 	while (contains_digits(city)) {
 		cout << "City contains number(s)!" << endl << "Enter city again: ";
 		city.clear(); //clear string
-		cin >> city;
+		cin.ignore(); //make getline ignore previous cout;
 		getline(cin, city); //allows city to contain spaces
 	}
 
@@ -194,7 +195,8 @@ void Phonebook::add_person() {
 }
 
 void Phonebook::remove_person() {
-	string namee, phone_number;
+	string namee = "NOT FOUND";
+	string phone_number;
 	cout << "Enter person's phone number: "; //There can be multiple person's with same name but phone number is always tied to one person.
 	cin >> phone_number;
 
@@ -206,11 +208,10 @@ void Phonebook::remove_person() {
 			cout << namee << " with phone number " << phone_number << " erased from the phonebook!" << endl;
 			break;
 		}
-		else {
-			cout << "Person with phone number " << phone_number << " was not found in the phonebook!" << endl;
-		}
 	}
-
+	if (namee == "NOT FOUND") {
+		cout << "Person with phone number " << phone_number << " was not found in the phonebook!" << endl;
+	}
 }
 
 void Phonebook::shutdown() {
