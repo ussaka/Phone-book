@@ -19,6 +19,7 @@ public:
 	void add_person(); //Add person to the phonebook
 	void remove_person(); //Remove person from the phonebook
 	void print_in_city(); //Print all persons in given city
+	void print_all(); //Print all persons. Print relatives first
 	void shutdown(); //End program
 
 	//Helper functions

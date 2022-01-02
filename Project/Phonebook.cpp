@@ -60,15 +60,11 @@ void Phonebook::start() {
 		case 5:
 			remove_person();
 			break;
-			//^ ^OK
-		case 6: //EI OK
-
+		case 6:
+			print_in_city();
 			break;
-		case 7: //EI OK!
-			for (auto& e : phonebook) {
-				cout << e << endl;
-				cout << endl;
-			}
+		case 7:
+			print_all();
 			break;
 		case 8:
 			shutdown();
@@ -78,8 +74,6 @@ void Phonebook::start() {
 		}
 	}
 }
-//^^EI OK
-
 
 void Phonebook::initialize() {
 	phonebook.clear();
@@ -214,12 +208,43 @@ void Phonebook::remove_person() {
 	}
 }
 
+void Phonebook::print_in_city() {
+	string city;
+	bool hit = false;
+	cout << "Enter the city: ";
+	cin.ignore(); //make getline ignore previous cout
+	getline(cin, city); //allows city to contain spaces
+	cout << endl;
+
+	for (auto& person : phonebook) {
+		if (person.city == city) {
+			cout << person << endl;
+			hit = true;
+		}
+	}
+
+	if (hit == false) {
+		cout << "No persons found in " << city << "!" << endl;
+	}
+}
+
+void Phonebook::print_all() {
+	for (auto& person : phonebook) {
+		if (person.relative == true) {
+			cout << person << endl << endl;
+		}
+	}
+	for (auto& person : phonebook) {
+		if (person.relative == false) {
+			cout << person << endl << endl;
+		}
+	}
+}
+
 void Phonebook::shutdown() {
 	cout << "Shutting down...." << endl;
 	exit(0);
 }
-//^^OK
-
 
 
 //Helper functions
@@ -240,22 +265,3 @@ bool Phonebook::other_than_numbers(string s) {
 	}
 	return false;
 }
-//^^OK
-
-
-
-
-
-void Phonebook::print_in_city() {
-	string input;
-	cout << "Enter the city: ";
-	cin >> input;
-
-	for (auto& e : phonebook) {
-		if (e.city == input) {
-			cout << e.name << endl;
-		}
-	}
-}
-
-//^^EI OK
