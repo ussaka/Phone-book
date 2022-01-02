@@ -149,7 +149,7 @@ void Phonebook::add_person() {
 
 	cout << "Number: ";
 	cin >> phone_number;
-	while (other_than_numbers(phone_number)) {
+	while (other_than_digits(phone_number)) {
 		cout << "Phone number contains character(s)!" << endl << "Enter phone number again: ";
 		phone_number.clear(); //clear string
 		cin >> phone_number;
@@ -257,7 +257,7 @@ bool Phonebook::contains_digits(string s) {
 	return false;
 }
 
-bool Phonebook::other_than_numbers(string s) {
+bool Phonebook::other_than_digits(string s) {
 	for (auto i = s.begin(); i != s.end(); ++i) {
 		if (!isdigit(*i)) {
 			return true;

@@ -2,13 +2,11 @@
  * C++ Project Assignment 7. "Phonebook" by Kasperi Kiviluoma
  */
 
+#pragma once
 #include <string>
 
-#ifndef PROJECT_PERSON_H
-#define PROJECT_PERSON_H
-
 class Person {
-	friend class Phonebook; //Make private members available to the phonebook
+	friend class Phonebook; //Make private members available to the Phonebook class
 	friend std::ostream& operator<<(std::ostream& out, const Person& p); //Print person
 
 public:
@@ -21,6 +19,3 @@ private:
 	std::string city;
 	bool relative;
 };
-
-#endif //PROJECT_PERSON_H
-

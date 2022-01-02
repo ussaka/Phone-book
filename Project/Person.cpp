@@ -11,10 +11,10 @@ using namespace std;
 ostream& operator<<(ostream& out, const Person& p) {
 	out << "Name: " << p.name << endl << "Email: " << p.email << endl << "Telephone number: " << p.telephone_number << endl << "City: " << p.city << endl;
 	if (p.relative == true) {
-		out << "Relative: Yes";
+		out << "Relative: Yes" << endl;
 	}
 	else if (p.relative == false) {
-		out << "Relative: No";
+		out << "Relative: No" << endl;
 	}
 	return out;
 }
