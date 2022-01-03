@@ -88,7 +88,7 @@ void Phonebook::save_to_file() {
 	else if (outFile.is_open()) {
 		outFile << "Name;Email;Telephone number;City;Relative" << endl;
 		for (auto& person : phonebook) {
-			outFile << person.name << ";" << person.email << ";" << person.telephone_number << ";" << person.city << ";" << person.relative << endl;
+			outFile << person << endl;
 		}
 		cout << "Phonebook saved to the file!" << endl;
 	}

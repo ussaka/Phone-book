@@ -8,11 +8,10 @@
 class Person {
 	friend class Phonebook; //Make private members available to the Phonebook class
 	friend std::ostream& operator<<(std::ostream& out, const Person& p); //Print person
+	friend istream& operator>>(istream& in, Persont& p);
 
 public:
 	Person(std::string _name, std::string _email, std::string _telephone_number, std::string _city, bool _relative);
-
-private:
 	std::string name;
 	std::string email;
 	std::string telephone_number;
