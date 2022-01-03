@@ -86,9 +86,9 @@ void Phonebook::save_to_file() {
 		cout << "Error, can't write to Phonebook.csv!" << endl;
 	}
 	else if (outFile.is_open()) {
-		outFile << "Name;Email;Telephone number;City;Relative" << endl;
+		outFile << "Name;Email;Telephone number;City;Relative" << endl; //header
 		for (auto& person : phonebook) {
-			outFile << person << endl;
+			outFile << person;
 		}
 		cout << "Phonebook saved to the file!" << endl;
 	}
@@ -96,33 +96,19 @@ void Phonebook::save_to_file() {
 
 void Phonebook::read_from_file() {
 	ifstream inputFile("Phonebook.csv");
+	Person person;
 
 	if (!inputFile.is_open()) {
 		cout << "Error, can't open Phonebook.csv!" << endl;
 	}
 	else if (inputFile.is_open()) {
-		string line, word, name, email, phone, city;
-		bool relative = false;
+		string line;
 
 		getline(inputFile, line); //skip first header line
 		while (getline(inputFile, line)) { //true while inputFile outputs line
 			stringstream s(line); //convert line to stream
-			getline(s, word, ';'); //get first word from the stream s, delimiter ';'
-			name = word;
-			getline(s, word, ';');
-			email = word;
-			getline(s, word, ';');
-			phone = word;
-			getline(s, word, ';');
-			city = word;
-			getline(s, word, '\n');
-			if (word == "0") {
-				relative = false;
-			}
-			else if (word == "1") {
-				relative = true;
-			}
-			phonebook.push_back(Person(name, email, phone, city, relative));
+			s >> person; //fill person's attributes with values from stream s
+			phonebook.push_back(person);
 		}
 		cout << "Read succesfull!" << endl;
 	}
@@ -130,15 +116,13 @@ void Phonebook::read_from_file() {
 
 void Phonebook::add_person() {
 	string name, email, phone_number, city, relative;
-	bool r;
 
-	cout << "Enter new person's info:" << endl;
 	cout << "Name: ";
-	cin.ignore(); //make getline ignore previous cout;
+	cin.ignore(); //ignore previously printed '\n'
 	getline(cin, name); //allows name to contain spaces
 	//Check that name doesn't contain numbers
 	while (contains_digits(name)) {
-		cout << "Name contains number(s)!" << endl << "Enter name again: ";
+		cout << "Name contains number(s)! Enter name again: ";
 		name.clear(); //clear string
 		getline(cin, name); //allows name to contain spaces
 	}
@@ -149,17 +133,16 @@ void Phonebook::add_person() {
 	cout << "Number: ";
 	getline(cin, phone_number);
 	while (other_than_digits(phone_number)) {
-		cout << "Phone number contains other symbol(s) than digits!" << endl << "Enter phone number again: ";
+		cout << "Phone number contains other symbol(s) than digits! Enter phone number again: ";
 		phone_number.clear(); //clear string
 		getline(cin, phone_number);
 	}
 
 	cout << "City: ";
-	cin.ignore(); //make getline ignore previous cout
 	getline(cin, city); //allows city to contain spaces
 	//Check that city doesn't contain numbers
 	while (contains_digits(city)) {
-		cout << "City contains number(s)!" << endl << "Enter city again: ";
+		cout << "City contains number(s)! Enter city again: ";
 		city.clear(); //clear string
 		getline(cin, city); //allows city to contain spaces
 	}
@@ -168,14 +151,12 @@ void Phonebook::add_person() {
 		cout << "Is this person relative?(Yes/No): ";
 		cin >> relative;
 		if (relative == "No") {
-			r = false;
-			Person p(name, email, phone_number, city, r);
+			Person p(name, email, phone_number, city, relative);
 			phonebook.push_back(p);
 			cout << "Person saved!" << endl;
 		}
 		else if (relative == "Yes") {
-			r = true;
-			Person p(name, email, phone_number, city, r);
+			Person p(name, email, phone_number, city, relative);
 			phonebook.push_back(p);
 			cout << "Person saved!" << endl;
 		}
@@ -196,7 +177,7 @@ void Phonebook::remove_person() {
 
 	for (auto it = phonebook.begin(); it != phonebook.end(); ++it) {
 		if (it->name == namee) {
-			Person p(it->name, it->email, it->city, it->telephone_number, it->relative);
+			Person p(it->name, it->email, it->city, it->telephone_number, it->relative); //ensure that name is stored to namee
 			namee = p.name;
 			phonebook.erase(it);
 			cout << namee << " erased from the phonebook!" << endl;
@@ -219,9 +200,9 @@ void Phonebook::print_in_city() {
 
 	for (auto& person : phonebook) {
 		if (person.city == city) {
-			cout << person << endl;
-
+			cout << "Name: " << person.name << endl << "Email: " << person.email << endl << "Phone number: " << person.telephone_number << endl << "City: " << person.city << endl << "Relative: " << person.relative << endl;
 			hit = true;
+			cout << endl;
 		}
 	}
 
@@ -234,14 +215,16 @@ void Phonebook::print_all() {
 	bool nothing_to_print = false;
 
 	for (auto& person : phonebook) {
-		if (person.relative == true) {
-			cout << person << endl;
+		if (person.relative == "Yes") {
+			cout << "Name: " << person.name << endl << "Email: " << person.email << endl << "Phone number: " << person.telephone_number << endl << "City: " << person.city << endl << "Relative: " << person.relative << endl;
+			cout << endl;
 			nothing_to_print = true;
 		}
 	}
 	for (auto& person : phonebook) {
-		if (person.relative == false) {
-			cout << person << endl;
+		if (person.relative == "No") {
+			cout << "Name: " << person.name << endl << "Email: " << person.email << endl << "Phone number: " << person.telephone_number << endl << "City: " << person.city << endl << "Relative: " << person.relative << endl;
+			cout << endl;
 			nothing_to_print = true;
 		}
 	}

@@ -13,12 +13,19 @@ ostream& operator<<(ostream& out, const Person& p) {
 	return out;
 }
 
-istream& operator>>(istream& in, Person& person) {
-	in >> person.name;
-	return in;
+istream& operator>>(istream& is, Person& person) {
+	getline(is, person.name, ';');
+	getline(is, person.email, ';');
+	getline(is, person.telephone_number, ';');
+	getline(is, person.city, ';');
+	getline(is, person.relative, '\n');
+	return is;
 }
 
-Person::Person(string _name, string _email, string _telephone_number, string _city, bool _relative) {
+Person::Person() {
+}
+
+Person::Person(string _name, string _email, string _telephone_number, string _city, string _relative) {
 	name = _name;
 	email = _email;
 	telephone_number = _telephone_number;

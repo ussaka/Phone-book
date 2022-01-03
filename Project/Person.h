@@ -7,14 +7,15 @@
 
 class Person {
 	friend class Phonebook; //Make private members available to the Phonebook class
-	friend std::ostream& operator<<(std::ostream& out, const Person& p); //Print person
-	friend istream& operator>>(istream& in, Persont& p);
+	friend std::ostream& operator<<(std::ostream& out, const Person& p);
+	friend std::istream& operator>>(std::istream& is, Person& p);
 
 public:
-	Person(std::string _name, std::string _email, std::string _telephone_number, std::string _city, bool _relative);
+	Person();
+	Person(std::string _name, std::string _email, std::string _telephone_number, std::string _city, std::string _relative);
 	std::string name;
 	std::string email;
 	std::string telephone_number;
 	std::string city;
-	bool relative;
+	std::string relative; //Couldn't get rest of the program to work if relative was bool
 };
