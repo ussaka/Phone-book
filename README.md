@@ -1,4 +1,4 @@
-# Phonebook
+# Phone book
 This code can be used as personal digital phonebook. It will store people's contact information.
 
 # The assignment instructions
