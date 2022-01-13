@@ -5,12 +5,13 @@ This code can be used as personal digital phonebook. It will store people's cont
 Global variables may not be used in any of the assignments. Classes that are to be saved to a file must provide overloaded operators for writing to and reading from a file. A class may provide a separate member function for interactive entry of values.
 
 Write a program to keep record of names, addresses and telephone numbers.
-Each structure contains the following information:
-• Name
-• E-mail address
-• Telephone number
-• City
-• Relative
+Each structure contains the following information:<br/>
+• Name<br/>
+• E-mail address<br/>
+• Telephone number<br/>
+• City<br/>
+• Relative<br/>
+
 The program must have (at least) following commands:
 1. Initialize (clear all records)
 2. Save contact information to file
