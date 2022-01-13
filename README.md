@@ -1,5 +1,5 @@
 # Phonebook
-
+This code can be used as personal digital phonebook. It will store people's contact information.
 
 # The assignment instructions
 Global variables may not be used in any of the assignments. Classes that are to be saved to a file must provide overloaded operators for writing to and reading from a file. A class may provide a separate member function for interactive entry of values.
